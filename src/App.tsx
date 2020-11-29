@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TodoHeader, {TodoHeaderStore} from "./components/TodoHeader";
+import TodoList, {TodoListStore} from "./components/TodoList";
+import {observer} from "mobx-react";
+import {observable} from "mobx";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export class AppState {
+    @observable todoHeaderState: TodoHeaderStore;
+    @observable todoListState: TodoListStore;
+
+    constructor(todoHeaderState: TodoHeaderStore, todoListState: TodoListStore) {
+        this.todoHeaderState = todoHeaderState;
+        this.todoListState = todoListState;
+    }
+}
+
+@observer
+class App extends React.Component<{ state: AppState }> {
+    render() {
+        let state = this.props.state;
+        return (
+            <>
+                <TodoHeader store={state.todoHeaderState}/>
+                <TodoList state={state.todoListState}/>
+            </>
+        )
+    }
 }
 
 export default App;
